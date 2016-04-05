@@ -31,7 +31,7 @@ many.txt:
 question1: primes.o question1.o
 	gcc -Wall -pthread -lm -o $@ $^
 
-question2: prime.o question2.c
+question2: primes.o question2.o
 	gcc -Wall -pthread -lm -o $@ $^
 
 # add your own rules when you create new programs
