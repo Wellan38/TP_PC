@@ -70,3 +70,36 @@ prime_pair fermatFactor(uint64_t n)
 	
 	return pp;
 }
+
+void premier(uint64_t max)
+{
+	uint64_t* m = (uint64_t*)malloc(sizeof(uint64_t)*(max/3));
+	uint64_t* p = (uint64_t*)malloc(sizeof(uint64_t)*(max/3));
+	uint64_t sommet = 1;
+	uint64_t essai;
+	
+	m[0] = 25;
+	p[0] = 5;
+	
+	uint64_t pasi = 4;
+	uint64_t i, j;
+	for(i=7; i< max; i+= pasi, pasi =6- pasi)
+	{
+		for(essai = p[j=0]; (i != m[j]) && (essai*essai < i); essai = p[j++])
+		{
+			if(i>m[j])
+			{
+				m[j] += 2*essai;
+			}
+		}
+		if(i != m[j])
+		{
+			printf("%ld\n", i);
+			p[sommet] = i;
+			m[sommet++] = i*i;
+		}
+	}
+	
+	free(p);
+	free(m);
+}
