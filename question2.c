@@ -1,5 +1,6 @@
 #include <stdio.h>
-#include <stdint.h>
+
+#include "primes.h"
 
 void print_prime_factors(uint64_t n);
 void parsePrimeFile(char* filename);
