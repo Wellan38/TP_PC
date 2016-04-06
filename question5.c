@@ -12,6 +12,8 @@ int main(void)
 {
 	pthread_mutex_init(&mutex, NULL);
 	parsePrimeFile("numbers.txt");
+	
+	pthread_mutex_destroy(&mutex);
 
     return 0;
 }
