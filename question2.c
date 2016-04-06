@@ -22,10 +22,12 @@ void parsePrimeFile(char* filename)
 	FILE* file = fopen(filename, "r");
 	uint64_t number;
 	
-	while(file)
+	if(file)
 	{
-		
-		fscanf(file, "%ld", &number);
-		print_prime_factors(number); 
+		while (!feof(file))
+		{
+			fscanf(file, "%ld", &number);
+			print_prime_factors(number); 
+		}
 	}
 }

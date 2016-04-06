@@ -34,6 +34,9 @@ question1: primes.o question1.o
 question2: primes.o question2.o
 	gcc -Wall -pthread -lm -o $@ $^
 
+question3: primes.o question3.o
+	gcc -Wall -pthread -lm -o $@ $^
+
 # add your own rules when you create new programs
 %.o: %.c %.h
 	gcc -Wall -pthread -o $@ -c $<
@@ -46,10 +49,13 @@ run1: question1
 
 run2: question2
 	time ./question2
+	
+run2: question3
+	time ./question3
 
 #########################
 ## utilities
 
 clean:
-	rm -f *.o question1 question2 tiny.txt small.txt medium.txt large.txt many.txt 
+	rm -f *.o question1 question2 question3 tiny.txt small.txt medium.txt large.txt many.txt 
 
