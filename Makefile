@@ -28,13 +28,7 @@ many.txt:
 #########################
 ## program compilation
 
-question1: primes.o question1.o
-	gcc -Wall -pthread -lm -o $@ $^
-
-question2: primes.o question2.o
-	gcc -Wall -pthread -lm -o $@ $^
-
-question3: primes.o question3.o
+question%: primes.o question%.o
 	gcc -Wall -pthread -lm -o $@ $^
 
 # add your own rules when you create new programs
@@ -44,18 +38,13 @@ question3: primes.o question3.o
 #########################
 ## program execution
 
-run1: question1
-	time ./question1
+run%: question%
+	time ./question%
 
-run2: question2
-	time ./question2
-	
-run2: question3
-	time ./question3
 
 #########################
 ## utilities
 
 clean:
-	rm -f *.o question1 question2 question3 tiny.txt small.txt medium.txt large.txt many.txt 
+	rm -f *.o question* tiny.txt small.txt medium.txt large.txt many.txt 
 

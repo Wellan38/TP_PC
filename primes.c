@@ -110,25 +110,33 @@ void premier(uint64_t max)
 	free(m);
 }
 
-char* returnPrimeFactors (uint64_t n)
+void returnPrimeFactors (uint64_t n, char* res)
 {
-	char* res;
+	char nb [STR_LEN];
+	
+	sprintf(nb, "");
+	sprintf(res, "");
 	
 	while( !(n%2) )
 	{
 		n/=2;
-		//res += " 2";
+		sprintf(nb, " 2");
+		strcat(res, nb);
 	}
     uint64_t i;
     for(i = 3; i<= n; i++)
     {
 		if(isfactor(n, i) && isPrime(i))
 		{
-			sprintf(res, "%ld", i);
+			double tamp = n/i;
+			while( tamp == floor(tamp) )
+			{
+				sprintf(nb, " %ld", i);
+				strcat(res, nb);
+				tamp/=i;
+			}
 		}
 	}
     
 	//prime_pair p = fermatFactor(n);
-    
-	printf("\n");
 }
