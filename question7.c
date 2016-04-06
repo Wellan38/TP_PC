@@ -16,7 +16,7 @@ int get_prime_factors(uint64_t n, uint64_t* dest)
 	}
 	
     uint64_t i;
-    for(i = 3; i<= n; i+=2)
+    for(i = 3; i<= n && cpt < MAX_FACTORS; i+=2)
     {
 		if(isfactor(n, i) && isPrime(i))
 		{
@@ -44,8 +44,34 @@ void print_prime_factors_2(uint64_t n)
 	printf("\n");
 }
 
+void parsePrimeFile(char* filename)
+{
+	FILE* file = fopen(filename, "r");
+	uint64_t number;
+	int car;
+	if(file)
+	{
+		while (1)
+		{
+			int even = 1;
+			
+			// Lecture du nombre à décomposer
+			fscanf(file, "%ld", &number);
+			print_prime_factors_2(number);
+			
+			car = getc(file);
+			if(car == EOF)
+			{
+				printf("fin");
+				break;
+			}
+			else ungetc(car, file);
+		}
+	}
+}
+
 int main(void)
 {
-	print_prime_factors_2(876578);
+	parsePrimeFile("numbers.txt");
 	return 0;
 }

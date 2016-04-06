@@ -29,7 +29,7 @@ many.txt:
 ## program compilation
 
 question%: primes.o question%.o
-	gcc -Wall -pthread -lm -o $@ $^
+	gcc -Wall -pthread -lm -o $@.exe $^
 
 # add your own rules when you create new programs
 %.o: %.c
@@ -49,5 +49,5 @@ run%: question%
 ## utilities
 
 clean:
-	rm -f *.o question* tiny.txt small.txt medium.txt large.txt many.txt 
+	rm -f *.o *.exe tiny.txt small.txt medium.txt large.txt many.txt 
 
