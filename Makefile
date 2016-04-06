@@ -32,14 +32,17 @@ question%: primes.o question%.o
 	gcc -Wall -pthread -lm -o $@ $^
 
 # add your own rules when you create new programs
-%.o: %.c %.h
+%.o: %.c
+	gcc -Wall -pthread -o $@ -c $<
+
+primes.o: primes.c primes.h
 	gcc -Wall -pthread -o $@ -c $<
 
 #########################
 ## program execution
 
 run%: question%
-	time ./question%
+	time ./question$*
 
 
 #########################
