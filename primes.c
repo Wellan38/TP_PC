@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include "primes.h"
 
-
+/**
+ * Print all prime factors of the integer n.
+ */
 void print_prime_factors(uint64_t n)
 {
-
 	printf("%ld:", n);
 	while( !(n%2) )
 	{
@@ -23,14 +24,14 @@ void print_prime_factors(uint64_t n)
 				tamp/=i;
 			}
 		} 
-	}
-    
-	//prime_pair p = fermatFactor(n);
-    
+	}    
 	printf("\n");
-
 }
 
+/**
+ * Return true only if the given integer n is
+ * a prime number.
+ */
 int isPrime(uint64_t n)
 {
 	uint64_t i;
@@ -52,11 +53,18 @@ int isPrime(uint64_t n)
 	return 1;
 }
 
+/**
+ * Return true only if the given interger n is
+ * divisible by the integer factor.
+ */
 int isfactor(uint64_t n, uint64_t factor)
 {
 	return ! (n%factor);
 }
 
+/**
+ * ?
+ */
 prime_pair fermatFactor(uint64_t n)
 {
 	uint64_t a = ceil(sqrt(n));
@@ -77,6 +85,9 @@ prime_pair fermatFactor(uint64_t n)
 	return pp;
 }
 
+/**
+ * Print all prime numbers lower than max.
+ */
 void premier(uint64_t max)
 {
 	uint64_t* m = (uint64_t*)malloc(sizeof(uint64_t)*(max/3));
@@ -110,6 +121,9 @@ void premier(uint64_t max)
 	free(m);
 }
 
+/**
+ * Return all the primes factors of n in the string res.
+ */
 void returnPrimeFactors (uint64_t n, char* res)
 {
 	char nb [STR_LEN];
@@ -137,9 +151,4 @@ void returnPrimeFactors (uint64_t n, char* res)
 			}
 		}
 	}
-    
-	//prime_pair p = fermatFactor(n);
-}
-
-
-// TODO(Ruben) mettre parse ici et lui passer une fonction en parametre
+ }
