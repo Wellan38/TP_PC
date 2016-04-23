@@ -3,6 +3,9 @@
 
 #include "primes.h"
 
+/**
+ * This is just a test file.
+ */
 int main(void)
 {
     print_prime_factors(77);	// expected result:   77: 7 11

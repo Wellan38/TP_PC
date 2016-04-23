@@ -152,3 +152,39 @@ void returnPrimeFactors (uint64_t n, char* res)
 		}
 	}
  }
+ 
+ /**
+ * Read the file filename and call the function f
+ * for each number in this file.
+ */
+void parsePrimeFile(char* filename, void (*f)(uint64_t number)) {
+	FILE* file = fopen(filename, "r");
+	uint64_t number;
+	
+	if(file)
+	{
+		while (!feof(file))
+		{
+			fscanf(file, "%ld", &number);
+			(*f)(number); 
+		}
+	}
+}
+
+/**
+ * Read the file filename and call the function f
+ * for each number in this file.
+ */
+void parsePrimeFile2(char* filename, char* res, void (*f)(uint64_t number, char* res)) {
+	FILE* file = fopen(filename, "r");
+	uint64_t number;
+	
+	if(file)
+	{
+		while (!feof(file))
+		{
+			fscanf(file, "%ld", &number);
+			(*f)(number, res); 
+		}
+	}
+}

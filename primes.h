@@ -42,3 +42,24 @@ void returnPrimeFactors (uint64_t n, char* res);
  * Print all prime numbers lower than max.
  */
 void premier(uint64_t max);
+
+/**
+ * Read the file filename and call the function f
+ * for each number in this file.
+ */
+void parsePrimeFile(char* filename, void (*f)(uint64_t number));
+
+/**
+ * Read the file filename and call the function f
+ * for each number in this file.
+ */
+void parsePrimeFile2(char* filename, char* res, void (*f)(uint64_t number, char* res));
+
+
+
+
+
+
+
+
+
