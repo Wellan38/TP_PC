@@ -3,39 +3,29 @@
 
 #include "primes.h"
 
-void parsePrimeFile(char* filename);
+/**
+ * The function that our threads will call.
+ */
 void* th(FILE* file);
 
+/**
+ * The global mutex our functions will use to prevent
+ * concurent access to the file we want to parse.
+ */
 static pthread_mutex_t mutex;
 
+/**
+ * Print all the prime factors of each numbers
+ * in the file numbers.txt,
+ * using two worker threads.
+ */
 int main(void)
 {
 	pthread_mutex_init(&mutex, NULL);
-	parsePrimeFile("numbers.txt");
-	
+	parsePrimeFileThreaded("numbers.txt", 2, th);
 	pthread_mutex_destroy(&mutex);
 
     return 0;
-}
-
-void parsePrimeFile(char* filename)
-{
-	FILE* file = fopen(filename, "r");
-	uint64_t number;
-			
-	// Création des threads
-	pthread_t thread1, thread2;
-
-	pthread_create(&thread1, NULL, th, file);
-	pthread_create(&thread2, NULL, th, file);
-
-	// Attente de la fin des threads
-	char *ret1;
-	char *ret2;
-	pthread_join(thread1, (void**)&ret1);
-	pthread_join(thread2, (void**)&ret2);
-	
-	fclose(file);
 }
 
 void* th(FILE* file)

@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <stdio.h>
 
 #define STR_LEN 200
 
@@ -50,10 +51,10 @@ void premier(uint64_t max);
 void parsePrimeFile(char* filename, void (*f)(uint64_t number));
 
 /**
- * Read the file filename and call the function f
- * for each number in this file.
+ * Read the file filename use numberOfThreads threads
+ * which call the function threadFunction.
  */
-void parsePrimeFile2(char* filename, char* res, void (*f)(uint64_t number, char* res));
+void parsePrimeFileThreaded(char* filename, int numberOfThreads, void (*threadFunction)(FILE* file));
 
 
 

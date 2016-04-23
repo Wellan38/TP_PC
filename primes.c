@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <pthread.h>
 #include "primes.h"
 
 /**
@@ -157,7 +158,8 @@ void returnPrimeFactors (uint64_t n, char* res)
  * Read the file filename and call the function f
  * for each number in this file.
  */
-void parsePrimeFile(char* filename, void (*f)(uint64_t number)) {
+void parsePrimeFile(char* filename, void (*f)(uint64_t number))
+{
 	FILE* file = fopen(filename, "r");
 	uint64_t number;
 	
@@ -169,22 +171,32 @@ void parsePrimeFile(char* filename, void (*f)(uint64_t number)) {
 			(*f)(number); 
 		}
 	}
+	fclose(file);
 }
 
 /**
- * Read the file filename and call the function f
- * for each number in this file.
+ * Read the file filename use numberOfThreads threads
+ * which call the function threadFunction.
  */
-void parsePrimeFile2(char* filename, char* res, void (*f)(uint64_t number, char* res)) {
+void parsePrimeFileThreaded(char* filename, int numberOfThreads, void (*threadFunction)(FILE* file))
+{
 	FILE* file = fopen(filename, "r");
-	uint64_t number;
+			
+	// Création des threads
+	pthread_t* threads = (pthread_t*)malloc(numberOfThreads*sizeof(pthread_t));
+	char** ret = (char**)malloc(numberOfThreads*sizeof(char*));
+	int i;
 	
-	if(file)
-	{
-		while (!feof(file))
-		{
-			fscanf(file, "%ld", &number);
-			(*f)(number, res); 
-		}
+	for(i = 0; i< numberOfThreads; i++) {
+		pthread_create(threads + i, NULL, threadFunction, file);
 	}
+	
+	// Attente de la fin des threads
+	for(i = 0; i< numberOfThreads; i++) {
+		pthread_join(*(threads+i), (void**)(ret+i));
+	}
+		
+	fclose(file);
+	free(threads);
+	free(ret);
 }
