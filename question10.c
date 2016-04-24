@@ -9,6 +9,7 @@
 static pthread_mutex_t mutexFile;
 static pthread_mutex_t mutexEcran;
 
+/*
 int get_prime_factors(uint64_t n, uint64_t* dest)
 {
 	int cpt = 0;
@@ -34,6 +35,7 @@ int get_prime_factors(uint64_t n, uint64_t* dest)
 	}
 	return cpt;
 }
+*/
 
 void* th(FILE* file)
 {
