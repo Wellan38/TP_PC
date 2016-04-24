@@ -90,25 +90,35 @@ int main(void)
 	pthread_mutex_destroy(&mutexEcran);
 	*/
 	
-	hash_table* h = create_hash(11);
+	hash_table* h = create_hash(100);
 	
-	uint32_t i;
+	FILE* file = fopen("numbers.txt", "r");
 	
-	for (i = 1; i <= 10; i++)
+	uint32_t number;
+	char* dec = (char*) malloc(sizeof(char)*STR_LEN);
+	
+	if (file)
 	{
-		if (i == 3)
+		while(!feof(file))
 		{
-			insert_hash(h, i, "test3");
-		}
-		else
-		{
-			insert_hash(h, i, "test");
+			fscanf(file, "%ld", &number);
+			returnPrimeFactors(number, dec);
+			insert_hash(h, number, dec);
 		}
 	}
 	
-	printf("%s\n", get_hash(h, 5));
+	free(dec);
+	
+	uint32_t i;
+	
+	for (i = 0; i < h->size; i++)
+	{
+		printf("%ld : %s\n", h->decompositions[i].number, h->decompositions[i].decomposition);
+	}
 	
 	delete_hash(h);
+	
+	fclose(file);
 	
 	return 0;
 }
