@@ -3,7 +3,7 @@
 
 #include "primes.h"
 
-#define MAX_FACTORS 21
+#define MAX_FACTORS 64
 
 int get_prime_factors(uint64_t n, uint64_t* dest)
 {

@@ -201,4 +201,3 @@ void parsePrimeFileThreaded(char* filename, int numberOfThreads, void (*threadFu
 	free(threads);
 	free(ret);
 }
->>>>>>> 4e22e1cc5a06299cc512c32556f2141c974a640b
