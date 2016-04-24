@@ -1,35 +1,40 @@
 #include <stdio.h>
 #include <pthread.h>
-
 #include "primes.h"
 
+/**
+ * The global mutex our functions will use to prevent
+ * concurent access to the file we want to parse.
+ */
 static pthread_mutex_t mutexFile;
+
+/**
+ * The global mutex our functions will use to prevent
+ * concurent access to the screen.
+ */
 static pthread_mutex_t mutexEcran;
 
-int get_prime_factors(uint64_t n, uint64_t* dest)
+/**
+ * The function our threads will use.
+ */
+void* th(FILE* file);
+
+/**
+ * Print all the prime factors of each numbers
+ * in the file numbers.txt, using two worker threads
+ * but with mutual exclusion for the screen.
+ */
+int main(void)
 {
-	int cpt = 0;
+	pthread_mutex_init(&mutexFile, NULL);
+	pthread_mutex_init(&mutexEcran, NULL);
+		
+	parsePrimeFileThreaded("numbers.txt", 2, th);
 	
-	while( !(n%2) )
-	{
-		n/=2;
-		dest[cpt++] = 2;
-	}
+	pthread_mutex_destroy(&mutexFile);
+	pthread_mutex_destroy(&mutexEcran);
 	
-    uint64_t i;
-    for(i = 3; i<= n && cpt < MAX_FACTORS; i+=2)
-    {
-		if(isfactor(n, i) && isPrime(i))
-		{
-			double tamp = n/i;
-			while( tamp == floor(tamp) )
-			{
-				dest[cpt++] = i;
-				tamp/=i;
-			}
-		}
-	}
-	return cpt;
+	return 0;
 }
 
 void* th(FILE* file)
@@ -53,39 +58,8 @@ void* th(FILE* file)
 			}
 			printf("\n");
     	pthread_mutex_unlock(&mutexEcran);
-    	
     }
 	pthread_exit(0);
-}
-
-void print_prime_factors_2(char* filename)
-{
-	FILE* file = fopen(filename, "r");	
-	
-	pthread_t t1, t2;
-	
-	pthread_create(&t1, NULL, th, file);
-	pthread_create(&t2, NULL, th, file);
-	
-	pthread_join(t1, NULL);
-	pthread_join(t2, NULL);
-	
-	fclose(file);
-}
-
-int main(void)
-{
-	pthread_mutex_init(&mutexFile, NULL);
-	pthread_mutex_init(&mutexEcran, NULL);
-	
-	char* filename = "numbers.txt";
-	
-	print_prime_factors_2(filename);
-	
-	pthread_mutex_destroy(&mutexFile);
-	pthread_mutex_destroy(&mutexEcran);
-	
-	return 0;
 }
 
 
