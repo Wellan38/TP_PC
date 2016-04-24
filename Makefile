@@ -28,7 +28,7 @@ many.txt:
 #########################
 ## program compilation
 
-question%: primes.o question%.o
+question%: primes.o hash.o question%.o
 	gcc -Wall -pthread -lm -o $@.exe $^
 
 # add your own rules when you create new programs
@@ -36,6 +36,9 @@ question%: primes.o question%.o
 	gcc -Wall -pthread -o $@ -c $<
 
 primes.o: primes.c primes.h
+	gcc -Wall -pthread -o $@ -c $<
+
+hash.o: hash.c hash.h
 	gcc -Wall -pthread -o $@ -c $<
 
 #########################

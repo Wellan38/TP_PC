@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include "primes.h"
 
-
 void print_prime_factors(uint64_t n)
 {
 
@@ -140,6 +139,5 @@ void returnPrimeFactors (uint64_t n, char* res)
     
 	//prime_pair p = fermatFactor(n);
 }
-
 
 // TODO(Ruben) mettre parse ici et lui passer une fonction en parametre

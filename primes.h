@@ -1,6 +1,8 @@
 #include <stdint.h>
 
+#ifndef STR_LEN
 #define STR_LEN 200
+#endif
 
 typedef struct prime_pair
 {
