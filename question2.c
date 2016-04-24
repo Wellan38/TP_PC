@@ -4,8 +4,7 @@
 
 /**
  * Print all the prime factors of each numbers
- * in the file numbers.txt,
- * using only one thread.
+ * in the file numbers.txt, using only one thread.
  */
 int main(void)
 {

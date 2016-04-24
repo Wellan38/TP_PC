@@ -163,13 +163,19 @@ void parsePrimeFile(char* filename, void (*f)(uint64_t number))
 {
 	FILE* file = fopen(filename, "r");
 	uint64_t number;
-	
+	char car;
 	if(file)
 	{
 		while (!feof(file))
 		{
 			fscanf(file, "%ld", &number);
-			(*f)(number); 
+			(*f)(number);
+			
+			if((car = getc(file)) == EOF)
+			{
+				break;	//  Avoid some problems
+			}
+			else ungetc(car, file);
 		}
 	}
 	fclose(file);
@@ -200,4 +206,33 @@ void parsePrimeFileThreaded(char* filename, int numberOfThreads, void (*threadFu
 	fclose(file);
 	free(threads);
 	free(ret);
+}
+
+/**
+ * Return all the primes factors of n in the array dest.
+ */
+int get_prime_factors(uint64_t n, uint64_t* dest)
+{
+	int cpt = 0;
+	
+	while( !(n%2) )
+	{
+		n/=2;
+		dest[cpt++] = 2;
+	}
+	
+    uint64_t i;
+    for(i = 3; i<= n && cpt < MAX_FACTORS; i+=2)
+    {
+		if(isfactor(n, i) && isPrime(i))
+		{
+			double tamp = n/i;
+			while( tamp == floor(tamp) )
+			{
+				dest[cpt++] = i;
+				tamp/=i;
+			}
+		}
+	}
+	return cpt;
 }

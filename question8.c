@@ -3,8 +3,6 @@
 
 #include "primes.h"
 
-#define MAX_FACTORS 21
-
 static pthread_mutex_t mutexFile;
 static pthread_mutex_t mutexEcran;
 

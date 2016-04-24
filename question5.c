@@ -16,8 +16,7 @@ static pthread_mutex_t mutex;
 
 /**
  * Print all the prime factors of each numbers
- * in the file numbers.txt,
- * using two worker threads.
+ * in the file numbers.txt, using two worker threads.
  */
 int main(void)
 {

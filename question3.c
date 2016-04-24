@@ -16,8 +16,7 @@ void parsePrimeFileDoubleThreaded(char* filename);
 
 /**
  * Print all the prime factors of each numbers
- * in the file numbers.txt,
- * using two threads.
+ * in the file numbers.txt, using two threads.
  */
 int main(void)
 {

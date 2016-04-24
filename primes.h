@@ -1,8 +1,20 @@
 #include <stdint.h>
 #include <stdio.h>
 
+/**
+ * The maximum length of the string that
+ * our functions use.
+ */
 #ifndef STR_LEN
-#define STR_LEN 200
+	#define STR_LEN 200
+#endif
+
+/**
+ * The maximum number of prime factors that an integer
+ * coded on 64 bits can have.
+ */
+#ifndef MAX_FACTORS
+	#define MAX_FACTORS 64
 #endif
 
 /**
@@ -39,7 +51,12 @@ int isPrime(uint64_t n);
 /**
  * Return all the primes factors of n in the string res.
  */
-void returnPrimeFactors (uint64_t n, char* res);
+void returnPrimeFactors(uint64_t n, char* res);
+
+/**
+ * Return all the primes factors of n in the array dest.
+ */
+int get_prime_factors(uint64_t n, uint64_t* dest);
 
 /**
  * Print all prime numbers lower than max.
