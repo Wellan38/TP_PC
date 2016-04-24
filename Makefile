@@ -3,8 +3,8 @@ default: help
 help:
 	@echo Useful targets:
 	@echo "  small.txt medium.txt large.txt many.txt:  generate some input files "
-	@echo "  question1 question2: compile your programs"
-	@echo "  run1 run2:  run your programs through the 'time' utility"
+	@echo "  question%: compile your programs"
+	@echo "  run%:  run your programs through the 'time' utility"
 	@echo "  clean:  delete all generated files"
 
 #########################
@@ -28,8 +28,13 @@ many.txt:
 #########################
 ## program compilation
 
+<<<<<<< HEAD
 question%: primes.o hash.o question%.o
 	gcc -Wall -pthread -lm -o $@.exe $^
+=======
+question%: primes.o question%.o
+	gcc -Wall -pthread -lm -o $@ $^
+>>>>>>> 4e22e1cc5a06299cc512c32556f2141c974a640b
 
 # add your own rules when you create new programs
 %.o: %.c

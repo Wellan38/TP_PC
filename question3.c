@@ -3,22 +3,29 @@
 
 #include "primes.h"
 
-void parsePrimeFile(char* filename);
+/**
+ * The function that our threads will call.
+ */
 void* th(uint64_t number);
 
+/**
+ * Parse the file filename and give its numbers to
+ * two threads to calculate their prime factors.
+ */
+void parsePrimeFileDoubleThreaded(char* filename);
+
+/**
+ * Print all the prime factors of each numbers
+ * in the file numbers.txt,
+ * using two threads.
+ */
 int main(void)
 {
-    // your code goes  here: open the text file (e.g.  with fopen() ),
-    // then read each line (e.g. with fgets() ), turn it into a number
-    // (e.g. with atoll() ) and then pass it to print_prime_factors.
-	//premier(150);
-	
-	parsePrimeFile("numbers.txt");
-
+	parsePrimeFileDoubleThreaded("numbers.txt");
     return 0;
 }
 
-void parsePrimeFile(char* filename)
+void parsePrimeFileDoubleThreaded(char* filename)
 {
 	FILE* file = fopen(filename, "r");
 	uint64_t number1, number2;
@@ -83,7 +90,6 @@ void parsePrimeFile(char* filename)
 				break;
 			}
 			else ungetc(car, file);
-			
 		}
 	}
 }

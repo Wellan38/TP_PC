@@ -1,9 +1,13 @@
 #include <stdio.h>
+#include <pthread.h>
 #include "primes.h"
 
+/**
+ * Print all prime factors of the integer n.
+ */
+ 
 void print_prime_factors(uint64_t n)
 {
-
 	printf("%ld:", n);
 	while( !(n%2) )
 	{
@@ -22,14 +26,14 @@ void print_prime_factors(uint64_t n)
 				tamp/=i;
 			}
 		} 
-	}
-    
-	//prime_pair p = fermatFactor(n);
-    
+	}    
 	printf("\n");
-
 }
 
+/**
+ * Return true only if the given integer n is
+ * a prime number.
+ */
 int isPrime(uint64_t n)
 {
 	uint64_t i;
@@ -51,11 +55,18 @@ int isPrime(uint64_t n)
 	return 1;
 }
 
+/**
+ * Return true only if the given interger n is
+ * divisible by the integer factor.
+ */
 int isfactor(uint64_t n, uint64_t factor)
 {
 	return ! (n%factor);
 }
 
+/**
+ * ?
+ */
 prime_pair fermatFactor(uint64_t n)
 {
 	uint64_t a = ceil(sqrt(n));
@@ -76,6 +87,9 @@ prime_pair fermatFactor(uint64_t n)
 	return pp;
 }
 
+/**
+ * Print all prime numbers lower than max.
+ */
 void premier(uint64_t max)
 {
 	uint64_t* m = (uint64_t*)malloc(sizeof(uint64_t)*(max/3));
@@ -109,6 +123,9 @@ void premier(uint64_t max)
 	free(m);
 }
 
+/**
+ * Return all the primes factors of n in the string res.
+ */
 void returnPrimeFactors (uint64_t n, char* res)
 {
 	char nb [STR_LEN];
@@ -136,8 +153,52 @@ void returnPrimeFactors (uint64_t n, char* res)
 			}
 		}
 	}
-    
-	//prime_pair p = fermatFactor(n);
+ }
+ 
+ /**
+ * Read the file filename and call the function f
+ * for each number in this file.
+ */
+void parsePrimeFile(char* filename, void (*f)(uint64_t number))
+{
+	FILE* file = fopen(filename, "r");
+	uint64_t number;
+	
+	if(file)
+	{
+		while (!feof(file))
+		{
+			fscanf(file, "%ld", &number);
+			(*f)(number); 
+		}
+	}
+	fclose(file);
 }
 
-// TODO(Ruben) mettre parse ici et lui passer une fonction en parametre
+/**
+ * Read the file filename use numberOfThreads threads
+ * which call the function threadFunction.
+ */
+void parsePrimeFileThreaded(char* filename, int numberOfThreads, void (*threadFunction)(FILE* file))
+{
+	FILE* file = fopen(filename, "r");
+			
+	// Création des threads
+	pthread_t* threads = (pthread_t*)malloc(numberOfThreads*sizeof(pthread_t));
+	char** ret = (char**)malloc(numberOfThreads*sizeof(char*));
+	int i;
+	
+	for(i = 0; i< numberOfThreads; i++) {
+		pthread_create(threads + i, NULL, threadFunction, file);
+	}
+	
+	// Attente de la fin des threads
+	for(i = 0; i< numberOfThreads; i++) {
+		pthread_join(*(threads+i), (void**)(ret+i));
+	}
+		
+	fclose(file);
+	free(threads);
+	free(ret);
+}
+>>>>>>> 4e22e1cc5a06299cc512c32556f2141c974a640b
