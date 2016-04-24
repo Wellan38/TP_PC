@@ -1,3 +1,6 @@
+#ifndef PRIMES_H
+#define PRIMES_H
+
 #include <stdint.h>
 #include <stdio.h>
 
@@ -75,7 +78,7 @@ void parsePrimeFile(char* filename, void (*f)(uint64_t number));
  */
 void parsePrimeFileThreaded(char* filename, int numberOfThreads, void (*threadFunction)(FILE* file));
 
-
+#endif
 
 
 
