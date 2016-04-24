@@ -28,13 +28,8 @@ many.txt:
 #########################
 ## program compilation
 
-<<<<<<< HEAD
 question%: primes.o hash.o question%.o
 	gcc -Wall -pthread -lm -o $@.exe $^
-=======
-question%: primes.o question%.o
-	gcc -Wall -pthread -lm -o $@ $^
->>>>>>> 4e22e1cc5a06299cc512c32556f2141c974a640b
 
 # add your own rules when you create new programs
 %.o: %.c
