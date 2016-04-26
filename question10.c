@@ -46,7 +46,7 @@ void* th(FILE* file);
 /**
  * Print all the prime factors of each numbers in the
  * file numbers.txt, using the memoization optimization
- * and two worker threads.
+ * and four worker threads.
  */
 int main(void)
 {
@@ -54,7 +54,7 @@ int main(void)
 	pthread_mutex_init(&mutexMap, NULL);
 	
 	initHashmap();
-	parsePrimeFileThreaded("numbers.txt", 2, th);
+	parsePrimeFileThreaded("numbers.txt", 4, th);
 	
 	pthread_mutex_destroy(&mutexFile);
 	pthread_mutex_destroy(&mutexMap);
