@@ -22,39 +22,31 @@ static pthread_mutex_t mutexEcran;
 void* th(FILE* file);
 
 /**
- * Print all the prime factors of each numbers
- * in the file numbers.txt, using two worker threads
- * but with mutual exclusion for the screen,
- * and use the memoization optimization.
+ * Print all the prime factors of each numbers in the
+ * file numbers.txt, using the memoization optimization.
  */
 int main(void)
 {
-	hash_table* h = create_hash(100);
-	printf("table creee !\n");
-	
+	hash_table* h = create_hash(100);	
 	FILE* file = fopen("numbers.txt", "r");
-	
 	uint64_t number;
 	uint64_t numberOfFactors;
 	uint64_t* dec = (uint64_t*) malloc(sizeof(uint64_t)*MAX_FACTORS);
+	unsigned int i;
+	unsigned int j;
 	
+	// Parse the file
 	if (file)
 	{
-		printf("Fichier ouvert !\n");
 		while(!feof(file))
 		{
 			fscanf(file, "%ld", &number);
-			printf("Le nombre lu vaut %ju\n", number);
 			numberOfFactors = get_prime_factors(number, dec);
-			printf("sa décomposition vaut: ");
-			printf(dec);
 			insert_hash(h, number, dec, numberOfFactors);
-			printf("\nnombre insere dans la table\n");
 		}
 	}
 	
-	unsigned int i;
-	unsigned int j;
+	
 	
 	// TODO : only print numbers for which their is a decomposition
 	for (i = 0; i < h->size; i++)
@@ -63,7 +55,7 @@ int main(void)
 		
 		for(j = 0; j<h->decompositions[i].numberOfFactors; j++)
 		{
-			printf(" %ju", h->decompositions[i].factors);
+			printf(" %ju", h->decompositions[i].factors[j]);
 		}
 		printf("\n");
 	}

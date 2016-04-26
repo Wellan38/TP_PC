@@ -44,20 +44,17 @@ hash_table* create_hash(unsigned int size)
 /**
  * Insert a number and his prime factors in a table.
  */
-void insert_hash(hash_table* h, uint64_t nb, uint64_t* decomposition, int numberOfFactors)
+int insert_hash(hash_table* h, uint64_t nb, uint64_t* decomposition, int numberOfFactors)
 {
 	uint64_t index = hash(h, nb);
-	while (h->decompositions[index].status != 0)
+	while (h->decompositions[index].status)
     {
     	index = (index + 1) % h->size;
     }
-	int i;
-	for(i = 0; i<numberOfFactors; i++) {
-		h->decompositions[index].factors[i] = decomposition[i];
-	}
 	h->decompositions[index].status = 1;
 	h->decompositions[index].number = nb;
 	h->decompositions[index].numberOfFactors = numberOfFactors;
+	return index;
 }
 
 /**
