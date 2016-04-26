@@ -15,7 +15,7 @@ void print_prime_factors(uint64_t n)
 		printf(" 2");
 	}
     uint64_t i;
-    for(i = 3; i<= n; i++)
+    for(i = 3; i<= n; i+=2)
     {
 		if(isfactor(n, i) && isPrime(i))
 		{
@@ -59,7 +59,7 @@ int isPrime(uint64_t n)
  * Return true only if the given interger n is
  * divisible by the integer factor.
  */
-int isfactor(uint64_t n, uint64_t factor)
+inline int isfactor(uint64_t n, uint64_t factor)
 {
 	return ! (n%factor);
 }
@@ -140,7 +140,7 @@ void returnPrimeFactors (uint64_t n, char* res)
 		strcat(res, nb);
 	}
     uint64_t i;
-    for(i = 3; i<= n; i++)
+    for(i = 3; i<= n; i+=2)
     {
 		if(isfactor(n, i) && isPrime(i))
 		{
@@ -220,9 +220,14 @@ int get_prime_factors(uint64_t n, uint64_t* dest)
 		n/=2;
 		dest[cpt++] = 2;
 	}
-	
+	while( !(n%3) )
+	{
+		n/=3;
+		dest[cpt++] = 3;
+	}
+	uint64_t pasi = 2;
     uint64_t i;
-    for(i = 3; i<= n && cpt < MAX_FACTORS; i+=2)
+    for(i = 5; i<= n && cpt < MAX_FACTORS; i+=pasi, pasi= 6-pasi)
     {
 		if(isfactor(n, i) && isPrime(i))
 		{
