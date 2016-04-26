@@ -48,7 +48,7 @@ int main(void)
 	
 	
 	
-	// TODO : only print numbers for which their is a decomposition
+	// TODO : only print numbers for which there is a decomposition
 	for (i = 0; i < h->size; i++)
 	{
 		printf("%ld :", h->decompositions[i].number);
