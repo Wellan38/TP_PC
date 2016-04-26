@@ -35,3 +35,7 @@
 *.dSYM/
 
 #tamp files
+*.stackdump
+
+#Test files
+ecm

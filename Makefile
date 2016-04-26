@@ -30,6 +30,9 @@ many.txt:
 
 question%: primes.o question%.o
 	gcc -Wall -pthread -lm -o $@.exe $^
+	
+lenstra: lenstra.o primes.o
+	gcc -Wall -pthread -lm -o $@.exe $^
 
 # add your own rules when you create new programs
 %.o: %.c
