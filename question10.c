@@ -59,7 +59,6 @@ int main(void)
 	pthread_mutex_destroy(&mutexFile);
 	pthread_mutex_destroy(&mutexMap);
 	
-	print_hash(hashmap);
 	destroyHashmap();
 	return 0;
 }

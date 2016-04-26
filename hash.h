@@ -9,10 +9,12 @@
  */
 typedef struct hash_box
 {
-	char status;							// Wheter the box is empty (0) or not (1)
-	uint64_t number;						// The number we have decomposed into prime factors
-	uint64_t* factors;			// The decomposition in prime factors
-	char numberOfFactors;					// The number of prime factors
+	char status;						// Wheter the box is empty (0) or not (1)
+	uint64_t number;					// The number we have decomposed into prime factors
+	uint64_t* factors[MAX_FACTORS];		// The decomposition in prime factors
+	char numberOfFactors;				// The number of prime factors
+	struct hash_box* leftNode;					// A collision number, lesser
+	struct hash_box* rightNode;				// A collision number, greater
 } hash_box;
 
 /**
@@ -51,11 +53,3 @@ int insert_hash(hash_table* h, uint64_t nb, uint64_t* decomposition, int numberO
  * the given number.
  */
 uint64_t* get_decomposition(hash_table* h, uint64_t nb);
-
-/**
- * Print all numbers in the hash table and their
- * decomposition in prime factors.
- * The shape is : "number: f1, ..., fn".
- */
-uint64_t* print_hash(hash_table* h);
-
