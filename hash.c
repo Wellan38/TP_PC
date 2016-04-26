@@ -72,14 +72,34 @@ void delete_hash(hash_table* h)
  * Return the decomposition in prime factors of
  * the given number.
  */
-uint64_t* get_decomposition(hash_table* h, uint64_t nb)
+unsigned int get_decomposition(hash_table* h, uint64_t nb, uint64_t* dec)
 {
 	uint64_t index = hash(h, nb);
+	
+	unsigned int cpt = 0;
+	int trouve = 1;
 	
 	while (h->decompositions[index].number != nb && h->decompositions[index].number != 0)
 	{
 		index = (index  + 1) % h->size;
+		cpt++;
+		
+		if (cpt == h->size)
+		{
+			trouve = 0;
+			break;
+		}
 	}
 	
-	return h->decompositions[index].factors;
+	if (trouve)
+	{
+		dec = h->decompositions[index].factors;
+		return h->decompositions[index].numberOfFactors;
+	}
+	
+	else
+	{
+		dec = NULL;
+		return 0;
+	}
 }

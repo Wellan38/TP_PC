@@ -81,17 +81,10 @@ void* th(FILE* file)
     	uint64_t factors[MAX_FACTORS];
     	int k = get_prime_factors(number,factors);
     	int j;
-    	pthread_mutex_lock(&mutexEcran);
-			printf("%ju: ",number);
-			for(j=0; j<k; j++)
-			{
-				printf("%ju ",factors[j]);
-			}
-			printf("\n");
-    	pthread_mutex_unlock(&mutexEcran);
+    	pthread_mutex_lock(&mutexMap);
+			
+    	pthread_mutex_unlock(&mutexMap);
     	
     }
 	pthread_exit(0);
 }
-
-

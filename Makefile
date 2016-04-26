@@ -30,6 +30,9 @@ many.txt:
 
 question%: primes.o question%.o
 	gcc -Wall -pthread -lm -o $@.exe $^
+
+test_alex: primes.o test_alex.o hash.o
+	gcc -Wall -pthread -lm -o $@.exe $^
 	
 lenstra: lenstra.o primes.o
 	gcc -Wall -pthread -lm -o $@.exe $^

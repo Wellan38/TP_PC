@@ -9,10 +9,10 @@
  */
 typedef struct hash_box
 {
-	char status;							// Wheter the box is empty (0) or not (1)
+	int status;							// Wheter the box is empty (0) or not (1)
 	uint64_t number;						// The number we have decomposed into prime factors
 	uint64_t* factors;			// The decomposition in prime factors
-	char numberOfFactors;					// The number of prime factors
+	unsigned int numberOfFactors;					// The number of prime factors
 } hash_box;
 
 /**
@@ -50,5 +50,5 @@ int insert_hash(hash_table* h, uint64_t nb, uint64_t* decomposition, int numberO
  * Return the decomposition in prime factors of
  * the given number.
  */
-uint64_t* get_decomposition(hash_table* h, uint64_t nb);
+unsigned int get_decomposition(hash_table* h, uint64_t nb, uint64_t* dec);
 
