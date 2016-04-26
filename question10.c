@@ -46,8 +46,17 @@ int main(void)
 			fscanf(file, "%ld", &number);
 			printf("Le nombre lu vaut %ju\n", number);
 			numberOfFactors = get_prime_factors(number, dec);
-			printf("sa décomposition vaut: ");
-			printf(dec);
+			printf("sa décomposition vaut:");
+			
+			int i;
+			
+			for (i = 0; i < numberOfFactors; i++)
+			{
+				printf(" %ld", dec[i]);
+			}
+			
+			printf("\r\n");
+			
 			insert_hash(h, number, dec, numberOfFactors);
 			printf("\nnombre insere dans la table\n");
 		}
