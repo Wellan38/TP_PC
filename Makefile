@@ -3,7 +3,8 @@ default: help
 help:
 	@echo Useful targets:
 	@echo "  small.txt medium.txt large.txt many.txt:  generate some input files "
-	@echo "  question%: compile your programs"
+	@echo "  question%: compile your programs for basic questions"
+	@echo "  race: compile the program for the race challenge"
 	@echo "  run%:  run your programs through the 'time' utility"
 	@echo "  clean:  delete all generated files"
 
@@ -32,6 +33,9 @@ question%: primes.o question%.o
 	gcc -Wall -pthread -lm -o $@.exe $^
 	
 lenstra: lenstra.o primes.o
+	gcc -Wall -pthread -lm -o $@.exe $^
+	
+race: speed.o primes.o hash.o
 	gcc -Wall -pthread -lm -o $@.exe $^
 
 # add your own rules when you create new programs
