@@ -32,9 +32,11 @@ hash_table* create_hash(unsigned int size)
 	// TODO : by default, it's 0. We may not wanna lost this time
 	for (i = 0; i < size; i++)
 	{
+		uint64_t* fac = (uint64_t*) malloc(sizeof(uint64_t) * MAX_FACTORS);
+		
 		ar[i].status = 0;
 		ar[i].number = 0;
-		//ar[i].factors = {0};
+		ar[i].factors = fac;
 	}
 	h->size = size;
 	h->decompositions = ar;
