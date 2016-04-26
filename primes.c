@@ -36,7 +36,6 @@ void print_prime_factors(uint64_t n)
  */
 int isPrime(uint64_t n)
 {
-	uint64_t i;
 	if( n <= 3 && n )
 	{
 		return 1;
@@ -45,7 +44,9 @@ int isPrime(uint64_t n)
 	{
 		return 0;
 	}
-	for(i=5; i<= sqrt(n); i+=2)
+	uint64_t i;
+	int pasi = 2;
+	for(i=5; i<= sqrt(n); i+=pasi, pasi = 6-pasi)
 	{
 		if(isfactor(n, i))
 		{
