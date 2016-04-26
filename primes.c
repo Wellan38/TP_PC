@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <pthread.h>
 #include "primes.h"
+#include "hash.h"
 
 /**
  * Print all prime factors of the integer n.
@@ -15,7 +16,7 @@ void print_prime_factors(uint64_t n)
 		printf(" 2");
 	}
     uint64_t i;
-    for(i = 3; i<= n; i++)
+    for(i = 3; i<= n; i+=2)
     {
 		if(isfactor(n, i) && isPrime(i))
 		{
@@ -36,7 +37,6 @@ void print_prime_factors(uint64_t n)
  */
 int isPrime(uint64_t n)
 {
-	uint64_t i;
 	if( n <= 3 && n )
 	{
 		return 1;
@@ -45,7 +45,9 @@ int isPrime(uint64_t n)
 	{
 		return 0;
 	}
-	for(i=5; i<= sqrt(n); i+=2)
+	uint64_t i;
+	int pasi = 2;
+	for(i=5; i<= sqrt(n); i+=pasi, pasi = 6-pasi)
 	{
 		if(isfactor(n, i))
 		{
@@ -59,7 +61,7 @@ int isPrime(uint64_t n)
  * Return true only if the given interger n is
  * divisible by the integer factor.
  */
-int isfactor(uint64_t n, uint64_t factor)
+inline int isfactor(uint64_t n, uint64_t factor)
 {
 	return ! (n%factor);
 }
@@ -140,7 +142,7 @@ void returnPrimeFactors (uint64_t n, char* res)
 		strcat(res, nb);
 	}
     uint64_t i;
-    for(i = 3; i<= n; i++)
+    for(i = 3; i<= n; i+=2)
     {
 		if(isfactor(n, i) && isPrime(i))
 		{
@@ -211,6 +213,7 @@ void parsePrimeFileThreaded(char* filename, int numberOfThreads, void (*threadFu
 /**
  * Return all the primes factors of n in the array dest.
  */
+ 
 int get_prime_factors(uint64_t n, uint64_t* dest)
 {
 	int cpt = 0;
@@ -220,9 +223,14 @@ int get_prime_factors(uint64_t n, uint64_t* dest)
 		n/=2;
 		dest[cpt++] = 2;
 	}
-	
+	while( !(n%3) )
+	{
+		n/=3;
+		dest[cpt++] = 3;
+	}
+	uint64_t pasi = 2;
     uint64_t i;
-    for(i = 3; i<= n && cpt < MAX_FACTORS; i+=2)
+    for(i = 5; i<= n && cpt < MAX_FACTORS; i+=pasi, pasi= 6-pasi)
     {
 		if(isfactor(n, i) && isPrime(i))
 		{

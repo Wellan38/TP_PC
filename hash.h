@@ -52,3 +52,10 @@ int insert_hash(hash_table* h, uint64_t nb, uint64_t* decomposition, int numberO
  */
 unsigned int get_decomposition(hash_table* h, uint64_t nb, uint64_t* dec);
 
+/**
+ * Print all numbers in the hash table and their
+ * decomposition in prime factors.
+ * The shape is : "number: f1, ..., fn".
+ */
+uint64_t* print_hash(hash_table* h);
+
