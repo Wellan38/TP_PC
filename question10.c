@@ -4,38 +4,8 @@
 #include "primes.h"
 #include "hash.h"
 
-#define MAX_FACTORS 21
-
 static pthread_mutex_t mutexFile;
 static pthread_mutex_t mutexEcran;
-
-/*
-int get_prime_factors(uint64_t n, uint64_t* dest)
-{
-	int cpt = 0;
-	
-	while( !(n%2) )
-	{
-		n/=2;
-		dest[cpt++] = 2;
-	}
-	
-    uint64_t i;
-    for(i = 3; i<= n && cpt < MAX_FACTORS; i+=2)
-    {
-		if(isfactor(n, i) && isPrime(i))
-		{
-			double tamp = n/i;
-			while( tamp == floor(tamp) )
-			{
-				dest[cpt++] = i;
-				tamp/=i;
-			}
-		}
-	}
-	return cpt;
-}
-*/
 
 void* th(FILE* file)
 {
@@ -93,6 +63,7 @@ int main(void)
 	*/
 	
 	hash_table* h = create_hash(100);
+	printf("table creee !\n");
 	
 	FILE* file = fopen("numbers.txt", "r");
 	
@@ -101,15 +72,20 @@ int main(void)
 	
 	if (file)
 	{
+		printf("Fichier ouvert !\n");
 		while(!feof(file))
 		{
 			fscanf(file, "%ld", &number);
+			printf("Le nombre lu vaut %ju\n", number);
 			returnPrimeFactors(number, dec);
+			printf("sa décomposition vaut: ");
+			printf(dec);
 			insert_hash(h, number, dec);
+			printf("\nnombre insere dans la table\n");
 		}
 	}
 	
-	free(dec);
+	//free(dec);
 	
 	uint32_t i;
 	
@@ -119,7 +95,7 @@ int main(void)
 	}
 	
 	delete_hash(h);
-	
+	free(dec);
 	fclose(file);
 	
 	return 0;
