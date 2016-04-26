@@ -34,8 +34,9 @@ int main(void)
 	
 	FILE* file = fopen("numbers.txt", "r");
 	
-	uint32_t number;
-	char* dec = (char*) malloc(sizeof(char)*STR_LEN);
+	uint64_t number;
+	uint64_t numberOfFactors;
+	uint64_t* dec = (uint64_t*) malloc(sizeof(uint64_t)*MAX_FACTORS);
 	
 	if (file)
 	{
@@ -44,19 +45,27 @@ int main(void)
 		{
 			fscanf(file, "%ld", &number);
 			printf("Le nombre lu vaut %ju\n", number);
-			returnPrimeFactors(number, dec);
+			numberOfFactors = get_prime_factors(number, dec);
 			printf("sa décomposition vaut: ");
 			printf(dec);
-			insert_hash(h, number, dec);
+			insert_hash(h, number, dec, numberOfFactors);
 			printf("\nnombre insere dans la table\n");
 		}
 	}
 	
-	uint32_t i;
+	unsigned int i;
+	unsigned int j;
 	
+	// TODO : only print numbers for which their is a decomposition
 	for (i = 0; i < h->size; i++)
 	{
-		printf("%ld : %s\n", h->decompositions[i].number, h->decompositions[i].decomposition);
+		printf("%ld :", h->decompositions[i].number);
+		
+		for(j = 0; j<h->decompositions[i].numberOfFactors; j++)
+		{
+			printf(" %ju", h->decompositions[i].factors);
+		}
+		printf("\n");
 	}
 	
 	delete_hash(h);
