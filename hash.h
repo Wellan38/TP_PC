@@ -44,7 +44,7 @@ void delete_hash(hash_table* h);
 /**
  * Insert a number and his prime factors in a table.
  */
-void insert_hash(hash_table* h, uint64_t nb, uint64_t* decomposition, int numberOfFactors);
+int insert_hash(hash_table* h, uint64_t nb, uint64_t* decomposition, int numberOfFactors);
 
 /**
  * Return the decomposition in prime factors of
