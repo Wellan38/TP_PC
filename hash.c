@@ -81,3 +81,26 @@ uint64_t* get_decomposition(hash_table* h, uint64_t nb)
 	
 	return h->decompositions[index].factors;
 }
+
+/**
+ * Print all numbers in the hash table and their
+ * decomposition in prime factors.
+ * The shape is : "number: f1, ..., fn".
+ */
+uint64_t* print_hash(hash_table* h)
+{
+	unsigned int i;
+	unsigned int j;
+	for(i=0; i< h->size; i++) {
+		if(!h->decompositions[i].status)
+		{
+			continue;
+		}
+		printf("%ju:");
+		for(j = 0; j<h->decompositions[i].numberOfFactors; j++)
+		{
+			printf(" %ju", h->decompositions[i].factors[j]);
+		}
+		printf("\n");
+	}
+}

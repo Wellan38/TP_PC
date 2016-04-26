@@ -5,6 +5,11 @@
 #include "hash.h"
 
 /**
+ * The size of the global hash map.
+ */
+#define HASH_SIZE 100
+
+/**
  * The global mutex our functions will use to prevent
  * concurent access to the file we want to parse.
  */
@@ -12,9 +17,26 @@ static pthread_mutex_t mutexFile;
 
 /**
  * The global mutex our functions will use to prevent
- * concurent access to the screen.
+ * concurent access to the hashmap.
  */
-static pthread_mutex_t mutexEcran;
+static pthread_mutex_t mutexMap;
+
+/**
+ * The global hash table our functions will use.
+ */
+static hash_table* hashmap;
+
+/**
+ * The function which will initialize
+ * the global hash table.
+ */
+static void initHashmap();
+
+/**
+ * The function which will destroy
+ * the global hash table.
+ */
+static void destroyHashmap();
 
 /**
  * The function our threads will use.
@@ -23,53 +45,28 @@ void* th(FILE* file);
 
 /**
  * Print all the prime factors of each numbers in the
- * file numbers.txt, using the memoization optimization.
+ * file numbers.txt, using the memoization optimization
+ * and two worker threads.
  */
 int main(void)
 {
-	hash_table* h = create_hash(100);	
-	FILE* file = fopen("numbers.txt", "r");
-	uint64_t number;
-	uint64_t numberOfFactors;
-	uint64_t* dec = (uint64_t*) malloc(sizeof(uint64_t)*MAX_FACTORS);
-	unsigned int i;
-	unsigned int j;
+	pthread_mutex_init(&mutexFile, NULL);
+	pthread_mutex_init(&mutexMap, NULL);
 	
-	// Parse the file
-	if (file)
-	{
-		while(!feof(file))
-		{
-			fscanf(file, "%ld", &number);
-			numberOfFactors = get_prime_factors(number, dec);
-			insert_hash(h, number, dec, numberOfFactors);
-		}
-	}
+	initHashmap();
+	parsePrimeFileThreaded("numbers.txt", 2, th);
 	
+	pthread_mutex_destroy(&mutexFile);
+	pthread_mutex_destroy(&mutexMap);
 	
-	
-	// TODO : only print numbers for which there is a decomposition
-	for (i = 0; i < h->size; i++)
-	{
-		printf("%ld :", h->decompositions[i].number);
-		
-		for(j = 0; j<h->decompositions[i].numberOfFactors; j++)
-		{
-			printf(" %ju", h->decompositions[i].factors[j]);
-		}
-		printf("\n");
-	}
-	
-	delete_hash(h);
-	free(dec);
-	fclose(file);
-	
+	print_hash(hashmap);
+	destroyHashmap();
 	return 0;
 }
 
 void* th(FILE* file)
 {
-	uint64_t number = 0;
+	/*uint64_t number = 0;
 	
 	while(!feof(file))
     {
@@ -88,9 +85,16 @@ void* th(FILE* file)
 			}
 			printf("\n");
     	pthread_mutex_unlock(&mutexEcran);
-    	
-    }
+    }*/
 	pthread_exit(0);
 }
 
+void initHashmap() {
+	hashmap = create_hash(HASH_SIZE);
+}
+
+void destroyHashmap()
+{
+	delete_hash(hashmap);
+}
 
