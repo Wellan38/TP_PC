@@ -28,7 +28,14 @@
 *.x86_64
 *.hex
 
+# Ressources
+*.pdf
+
 # Debug files
 *.dSYM/
 
 #tamp files
+*.stackdump
+
+#Test files
+ecm
