@@ -79,7 +79,7 @@ unsigned int get_decomposition(hash_table* h, uint64_t nb, uint64_t* dec)
 	uint64_t index = hash(h, nb);
 	
 	unsigned int cpt = 0;
-	int trouve = 1;
+	char trouve = 1;
 	
 	while (h->decompositions[index].number != nb && h->decompositions[index].number != 0)
 	{
@@ -95,7 +95,10 @@ unsigned int get_decomposition(hash_table* h, uint64_t nb, uint64_t* dec)
 	
 	if (trouve)
 	{
-		dec = h->decompositions[index].factors;
+		for(cpt = 0; cpt<h->decompositions[index].numberOfFactors; cpt++)
+		{
+			dec[cpt] = h->decompositions[index].factors[cpt];
+		}
 		return h->decompositions[index].numberOfFactors;
 	}
 	
