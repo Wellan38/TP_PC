@@ -11,6 +11,12 @@
 
 /**
  * The global mutex our functions will use to prevent
+ * concurent access to the screen.
+ */
+static pthread_mutex_t mutexEcran;
+
+/**
+ * The global mutex our functions will use to prevent
  * concurent access to the file we want to parse.
  */
 static pthread_mutex_t mutexFile;
@@ -58,13 +64,14 @@ int main(void)
 {
 	pthread_mutex_init(&mutexFile, NULL);
 	pthread_mutex_init(&mutexMap, NULL);
+	pthread_mutex_init(&mutexEcran, NULL);
 	
 	initHashmap();
 	parsePrimeFileThreaded("numbers.txt", 2, th);
 	
 	pthread_mutex_destroy(&mutexFile);
 	pthread_mutex_destroy(&mutexMap);
-	print_hash(hashmap);
+	pthread_mutex_destroy(&mutexEcran);
 	destroyHashmap();
 	return 0;
 }
@@ -81,6 +88,15 @@ void* th(FILE* file)
     	
     	uint64_t factors[MAX_FACTORS];
     	int k = get_prime_factors_hash(number, factors, hashmap);
+		unsigned int i;
+		pthread_mutex_lock(&mutexEcran);
+			fprintf(stdout, "%ju :", number);
+			for(i=0; i<k; i++)
+			{
+				fprintf(stdout, " %ju", factors[i]);
+			}
+			fprintf(stdout, "\n");
+		pthread_mutex_unlock(&mutexEcran);
     }
 	pthread_exit(0);
 }
