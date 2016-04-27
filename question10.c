@@ -114,7 +114,6 @@ inline void destroyHashmap()
 int get_prime_factors_hash(uint64_t n, uint64_t* dest, hash_table* h)
 {
 	unsigned int cpt = 0;
-	uint64_t root = sqrt(n);
 	while( !(n%2) )
 	{
 		n/=2;
@@ -128,7 +127,7 @@ int get_prime_factors_hash(uint64_t n, uint64_t* dest, hash_table* h)
 	uint64_t pasi = 2;
     uint64_t i;
 	uint64_t* dec = (uint64_t*) malloc(sizeof(uint64_t) * MAX_FACTORS);
-    for(i = 5; i<= root && cpt < MAX_FACTORS; i+=pasi, pasi= 6-pasi)
+    for(i = 5; i<= n; i+=pasi, pasi= 6-pasi)
     {
 		if(isfactor(n, i))
 		{
@@ -139,9 +138,7 @@ int get_prime_factors_hash(uint64_t n, uint64_t* dest, hash_table* h)
 			
 			if (nb_fac > 0)
 			{
-				fprintf(stdout, "It already exists !\n");
 				unsigned int j;
-				
 				for (j = 0; j < nb_fac; j++)
 				{
 					dest[cpt++] = dec[j];
