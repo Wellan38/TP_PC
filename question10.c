@@ -114,10 +114,20 @@ inline void destroyHashmap()
 int get_prime_factors_hash(uint64_t n, uint64_t* dest, hash_table* h)
 {
 	unsigned int cpt = 0;
-	/*pthread_mutex_lock(&mutexMap);
+	uint64_t pasi = 2;
+    uint64_t i;
+	uint64_t* dec = (uint64_t*) malloc(sizeof(uint64_t) * MAX_FACTORS);
+	pthread_mutex_lock(&mutexMap);
 		unsigned int nb_fac = get_decomposition(h, n, dec);
 	pthread_mutex_unlock(&mutexMap);
-	if(n)*/
+	if(nb_fac >0)
+	{
+		for (i = 0; i < nb_fac; i++)
+		{
+			dest[cpt++] = dec[i];
+		}
+		return nb_fac;
+	}
 	while( !(n%2) )
 	{
 		n/=2;
@@ -128,9 +138,7 @@ int get_prime_factors_hash(uint64_t n, uint64_t* dest, hash_table* h)
 		n/=3;
 		dest[cpt++] = 3;
 	}
-	uint64_t pasi = 2;
-    uint64_t i;
-	uint64_t* dec = (uint64_t*) malloc(sizeof(uint64_t) * MAX_FACTORS);
+	
     for(i = 5; i<= n; i+=pasi, pasi= 6-pasi)
     {
 		if(isfactor(n, i))
