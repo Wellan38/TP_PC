@@ -114,6 +114,10 @@ inline void destroyHashmap()
 int get_prime_factors_hash(uint64_t n, uint64_t* dest, hash_table* h)
 {
 	unsigned int cpt = 0;
+	/*pthread_mutex_lock(&mutexMap);
+		unsigned int nb_fac = get_decomposition(h, n, dec);
+	pthread_mutex_unlock(&mutexMap);
+	if(n)*/
 	while( !(n%2) )
 	{
 		n/=2;
@@ -131,7 +135,6 @@ int get_prime_factors_hash(uint64_t n, uint64_t* dest, hash_table* h)
     {
 		if(isfactor(n, i))
 		{
-    	
 			pthread_mutex_lock(&mutexMap);
 				unsigned int nb_fac = get_decomposition(h, i, dec);
 			pthread_mutex_unlock(&mutexMap);
@@ -149,11 +152,10 @@ int get_prime_factors_hash(uint64_t n, uint64_t* dest, hash_table* h)
 			{
 				if(isPrime(i))
 				{
-					double tamp = n/i;
-					while( tamp == floor(tamp) )
+					while( !(n%i) )
 					{
+						n/=i;
 						dest[cpt++] = i;
-						tamp/=i;
 					}
 				}
 			}
