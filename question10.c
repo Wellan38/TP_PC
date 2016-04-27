@@ -43,16 +43,17 @@ static void destroyHashmap();
  */
 void* th(FILE* file);
 
-//void print_hash(hash_table* h);
+/**
+ * Insert the number n in the hash table with its
+ * decomposition. If it already exists, do nothing.
+ */
+int get_prime_factors_hash(uint64_t n, uint64_t* dest, hash_table* h);
 
 /**
  * Print all the prime factors of each numbers in the
  * file numbers.txt, using the memoization optimization
  * and four worker threads.
  */
- 
-int get_prime_factors_hash(uint64_t n, uint64_t* dest, hash_table* h);
-
 int main(void)
 {
 	pthread_mutex_init(&mutexFile, NULL);
@@ -63,7 +64,6 @@ int main(void)
 	
 	pthread_mutex_destroy(&mutexFile);
 	pthread_mutex_destroy(&mutexMap);
-	printf("file parsed\n");
 	print_hash(hashmap);
 	destroyHashmap();
 	return 0;
@@ -78,7 +78,6 @@ void* th(FILE* file)
 		pthread_mutex_lock(&mutexFile);
 			fscanf(file, "%ld", &number);
 		pthread_mutex_unlock(&mutexFile);
-		printf("a thread read %ju", number);
     	
     	uint64_t factors[MAX_FACTORS];
     	int k = get_prime_factors_hash(number, factors, hashmap);
@@ -86,18 +85,18 @@ void* th(FILE* file)
 	pthread_exit(0);
 }
 
-void initHashmap() {
+inline void initHashmap() {
 	hashmap = create_hash(HASH_SIZE);
 }
 
-void destroyHashmap()
+inline void destroyHashmap()
 {
 	delete_hash(hashmap);
 }
 
 int get_prime_factors_hash(uint64_t n, uint64_t* dest, hash_table* h)
 {
-	int cpt = 0;
+	unsigned int cpt = 0;
 	
 	while( !(n%2) )
 	{
@@ -146,38 +145,10 @@ int get_prime_factors_hash(uint64_t n, uint64_t* dest, hash_table* h)
 		}
     	
 	}
-	
-	printf("ok\n");
-	
+		
 	pthread_mutex_lock(&mutexMap);
 	insert_hash(hashmap, n, dest, cpt);
 	pthread_mutex_unlock(&mutexMap);
 	
 	return cpt;
 }
-
-/*
-void print_hash(hash_table* h)
-{
-	int i;
-	
-	for (i = 0; i < h->size; i++)
-	{
-		uint64_t n = h->decompositions[i].number;
-		
-		if (n != 0)
-		{
-			printf("%ld :", n);
-			
-			int j;
-			
-			for (j = 0; j < h->decompositions[i].numberOfFactors; j++)
-			{
-				printf(" %ld", h->decompositions[i].factors[j];
-			}
-			
-			printf("\n");
-		}
-	}
-}
-*/
