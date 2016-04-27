@@ -63,7 +63,7 @@ int main(void)
 	
 	pthread_mutex_destroy(&mutexFile);
 	pthread_mutex_destroy(&mutexMap);
-	
+	printf("file parsed\n");
 	print_hash(hashmap);
 	destroyHashmap();
 	return 0;
@@ -78,9 +78,10 @@ void* th(FILE* file)
 		pthread_mutex_lock(&mutexFile);
 			fscanf(file, "%ld", &number);
 		pthread_mutex_unlock(&mutexFile);
+		printf("a thread read %ju", number);
     	
     	uint64_t factors[MAX_FACTORS];
-    	int k = get_prime_factors_hash(number,factors, hashmap);
+    	int k = get_prime_factors_hash(number, factors, hashmap);
     }
 	pthread_exit(0);
 }
@@ -112,34 +113,38 @@ int get_prime_factors_hash(uint64_t n, uint64_t* dest, hash_table* h)
     uint64_t i;
     for(i = 5; i<= n && cpt < MAX_FACTORS; i+=pasi, pasi= 6-pasi)
     {
-    	uint64_t* dec = (uint64_t*) malloc(sizeof(uint64_t) * MAX_FACTORS);
+		if(isfactor(n, i))
+		{
+			uint64_t* dec = (uint64_t*) malloc(sizeof(uint64_t) * MAX_FACTORS);
     	
-    	pthread_mutex_lock(&mutexMap);
-    	unsigned int nb_fac = get_decomposition(h, i, dec);
-    	pthread_mutex_unlock(&mutexMap);
-    	
-    	if (nb_fac > 0)
-    	{
-    		int j;
-    		
-    		for (j = 0; j < nb_fac; j++)
-    		{
-    			dest[cpt++] = dec[j];
-    		}
-    	}
-    	
-    	else
-    	{
-    		if(isfactor(n, i) && isPrime(i))
+			pthread_mutex_lock(&mutexMap);
+			unsigned int nb_fac = get_decomposition(h, i, dec);
+			pthread_mutex_unlock(&mutexMap);
+			
+			if (nb_fac > 0)
 			{
-				double tamp = n/i;
-				while( tamp == floor(tamp) )
+				int j;
+				
+				for (j = 0; j < nb_fac; j++)
 				{
-					dest[cpt++] = i;
-					tamp/=i;
+					dest[cpt++] = dec[j];
 				}
 			}
-    	}
+			
+			else
+			{
+				if(isPrime(i))
+				{
+					double tamp = n/i;
+					while( tamp == floor(tamp) )
+					{
+						dest[cpt++] = i;
+						tamp/=i;
+					}
+				}
+			}
+		}
+    	
 	}
 	
 	printf("ok\n");

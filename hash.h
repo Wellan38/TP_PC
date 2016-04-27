@@ -11,7 +11,7 @@ typedef struct hash_box
 {
 	int status;							// Wheter the box is empty (0) or not (1)
 	uint64_t number;						// The number we have decomposed into prime factors
-	uint64_t* factors;			// The decomposition in prime factors
+	uint64_t factors[MAX_FACTORS];			// The decomposition in prime factors
 	unsigned int numberOfFactors;					// The number of prime factors
 } hash_box;
 

@@ -31,12 +31,9 @@ hash_table* create_hash(unsigned int size)
 	
 	// TODO : by default, it's 0. We may not wanna lost this time
 	for (i = 0; i < size; i++)
-	{
-		uint64_t* fac = (uint64_t*) malloc(sizeof(uint64_t) * MAX_FACTORS);
-		
+	{		
 		ar[i].status = 0;
 		ar[i].number = 0;
-		ar[i].factors = fac;
 	}
 	h->size = size;
 	h->decompositions = ar;
@@ -56,6 +53,11 @@ int insert_hash(hash_table* h, uint64_t nb, uint64_t* decomposition, int numberO
 	h->decompositions[index].status = 1;
 	h->decompositions[index].number = nb;
 	h->decompositions[index].numberOfFactors = numberOfFactors;
+	unsigned int i;
+	for(i = 0; i<numberOfFactors; i++)
+	{
+		h->decompositions[index].factors[i] = decomposition[i];
+	}
 	return index;
 }
 
@@ -118,7 +120,7 @@ uint64_t* print_hash(hash_table* h)
 		{
 			continue;
 		}
-		printf("%ju:");
+		printf("%ju:", h->decompositions[i].number);
 		for(j = 0; j<h->decompositions[i].numberOfFactors; j++)
 		{
 			printf(" %ju", h->decompositions[i].factors[j]);
