@@ -11,6 +11,12 @@
 
 /**
  * The global mutex our functions will use to prevent
+ * concurent access to the screen.
+ */
+static pthread_mutex_t mutexEcran;
+
+/**
+ * The global mutex our functions will use to prevent
  * concurent access to the file we want to parse.
  */
 static pthread_mutex_t mutexFile;
@@ -39,6 +45,12 @@ static void initHashmap();
 static void destroyHashmap();
 
 /**
+ * Insert the number n in the hash table with its
+ * decomposition. If it already exists, do nothing.
+ */
+int get_prime_factors_hash(uint64_t n, uint64_t* dest, hash_table* h);
+
+/**
  * The function our threads will use.
  */
 void* th(FILE* file);
@@ -57,40 +69,40 @@ int main(int argc, char** argv)
 	}
 	pthread_mutex_init(&mutexFile, NULL);
 	pthread_mutex_init(&mutexMap, NULL);
+	pthread_mutex_init(&mutexEcran, NULL);
 	
 	initHashmap();
-	parsePrimeFileThreaded(argv[1], 4, th);
+	fprintf(stdout, "Map init\n");
+	parsePrimeFileThreaded(argv[1], 1, th);
 	
 	pthread_mutex_destroy(&mutexFile);
 	pthread_mutex_destroy(&mutexMap);
+	pthread_mutex_destroy(&mutexEcran);
 	
-	print_hash(hashmap);
 	destroyHashmap();
 	return 0;
 }
 
 void* th(FILE* file)
 {
-	/*uint64_t number = 0;
-	
+	uint64_t number = 0;
 	while(!feof(file))
     {
 		pthread_mutex_lock(&mutexFile);
 			fscanf(file, "%ld", &number);
 		pthread_mutex_unlock(&mutexFile);
-    	
     	uint64_t factors[MAX_FACTORS];
-    	int k = get_prime_factors(number,factors);
-    	int j;
-    	pthread_mutex_lock(&mutexEcran);
-			printf("%ju: ",number);
-			for(j=0; j<k; j++)
+    	int k = get_prime_factors_hash(number, factors, hashmap);
+		unsigned int i;
+		pthread_mutex_lock(&mutexEcran);
+			fprintf(stdout, "%ju :", number);
+			for(i=0; i<k; i++)
 			{
-				printf("%ju ",factors[j]);
+				fprintf(stdout, " %ju", factors[i]);
 			}
-			printf("\n");
-    	pthread_mutex_unlock(&mutexEcran);
-    }*/
+			fprintf(stdout, "\n");
+		pthread_mutex_unlock(&mutexEcran);
+    }
 	pthread_exit(0);
 }
 
@@ -101,4 +113,71 @@ void initHashmap() {
 void destroyHashmap()
 {
 	delete_hash(hashmap);
+}
+
+int get_prime_factors_hash(uint64_t n, uint64_t* dest, hash_table* h)
+{
+	unsigned int cpt = 0;
+	uint64_t pasi = 2;
+    uint64_t i;
+	uint64_t* dec = (uint64_t*) malloc(sizeof(uint64_t) * MAX_FACTORS);
+	pthread_mutex_lock(&mutexMap);
+		unsigned int nb_fac = get_decomposition(h, n, dec);
+	pthread_mutex_unlock(&mutexMap);
+	if(nb_fac >0)
+	{
+		for (i = 0; i < nb_fac; i++)
+		{
+			dest[cpt++] = dec[i];
+		}
+		return nb_fac;
+	}
+	while( !(n%2) )
+	{
+		n/=2;
+		dest[cpt++] = 2;
+	}
+	while( !(n%3) )
+	{
+		n/=3;
+		dest[cpt++] = 3;
+	}
+	
+    for(i = 5; i<= n; i+=pasi, pasi= 6-pasi)
+    {
+		if(isfactor(n, i))
+		{
+			pthread_mutex_lock(&mutexMap);
+				unsigned int nb_fac = get_decomposition(h, i, dec);
+			pthread_mutex_unlock(&mutexMap);
+			
+			if (nb_fac > 0)
+			{
+				unsigned int j;
+				for (j = 0; j < nb_fac; j++)
+				{
+					dest[cpt++] = dec[j];
+				}
+			}
+			
+			else
+			{
+				if(isPrime(i))
+				{
+					while( !(n%i) )
+					{
+						n/=i;
+						dest[cpt++] = i;
+					}
+				}
+			}
+		}
+	}
+	free(dec);
+	
+	pthread_mutex_lock(&mutexMap);
+		insert_hash(hashmap, n, dest, cpt);
+	pthread_mutex_unlock(&mutexMap);
+	
+	return cpt;
 }
